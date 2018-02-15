@@ -1,16 +1,53 @@
 defmodule WarEngine.GamePlay.Server do
   use GenServer
   alias WarEngine.GamePlay.{Server, Deck, Game}
+    @moduledoc """
+    Documentation for WarEngine.GamePlay.Server
+    """
+
+    @doc """
+    Start each game in its own process named after the "game: id"
+    """
 
   # Client API
   def start_link(id) do
     GenServer.start_link(__MODULE__, :ok, name: {:global, "game:#{id}"})
   end
 
+    @doc """
+      Retrieve the current state of the game (requires pid)
+
+    ## Examples
+    
+     iex> Server.read(pid)
+
+      %WarEngine.GamePlay.Game{computer_cards: [{12, :hearts}, {6, :hearts},
+      {13, :spades}, {6, :spades}, {10, :hearts}, {7, :clubs}, {10, :spades},
+      {5, :clubs}, {11, :hearts}, {3, :diamonds}, {11, :clubs}, {3, :spades},
+      {10, :diamonds}], status: "in progress",
+      user_cards: [{2, :spades}, {13, :hearts}, {5, :hearts}, {14, :diamonds},
+      {7, :spades}, {12, :spades}, {5, :spades}, {9, :clubs}, {3, :hearts},
+      {12, :clubs}, {7, :hearts}, {14, :clubs}, {6, :clubs}, {13, :clubs},
+      {6, :diamonds}, {11, :spades}, {4, :spades}, {14, :spades}, {7, :diamonds},
+      {9, :diamonds}, {3, :clubs}, {14, :hearts}, {2, :clubs}, {10, :clubs},
+      {2, :hearts}, {12, :diamonds}, {5, :diamonds}, {11, :diamonds},
+      {4, :diamonds}, {13, :diamonds}, {2, :diamonds}], user_id: :none}
+
+    """
   def read(pid) do
     GenServer.call(pid, :read)
   end
 
+    @doc """
+    Compares both the user and the computers top cards
+
+  ## Examples
+
+    iex> Server.turn(pid)
+
+    "User wins with 9!"
+
+  """
   def turn(pid) do
     GenServer.call(pid, :turn)
   end

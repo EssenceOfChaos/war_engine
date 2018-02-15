@@ -7,14 +7,8 @@ defmodule WarEngine.GamePlay.Game do
             status: :uninitialized
 
 
-  def start_link() do
-    Agent.start_link(fn -> initialize_game() end)
+  def new_game(id) do
+    Server.start_link(id)
   end
-
-  defp initialize_game() do
-    Server.start_link
-  end
-
-
 
 end
